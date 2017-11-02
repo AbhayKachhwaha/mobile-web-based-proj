@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="_css/jquery.mobile.css" />
+    <script src="_js/jquery.js"></script>
+    <script src="_js/jquery.mobile.js"></script>
+    <title>Final Project</title>
+    
+    <style>
+            th { padding: 5px; margin: 5px; color: grey; font-weight: bold;}
+            td {padding: 5px; margin: 5px; color: teal;}
+            #title {font-weight: bold; color: teal; font-style:italic;}
+    </style>
+</head>
+
+<body>
+	<div id="jsonOut" data-role="page" data-theme="a">
+		<header data-role="header">
+                    <h1>Textual Display of Data</h1>
+		</header>
+		
+		<section class="ui-content" role="main">
+                    <section id="sdata1">
+                        <section data-role="collapsible">
+				<h4><span id="p1"></span></h4>
+                                <section data-role="collapsible" id="y1"></section>
+			</section>
+			<section data-role="collapsible">
+				<h4><span id="p2"></span></h4>
+                                <section data-role="collapsible" id="y2"></section>
+			</section>
+			<section data-role="collapsible">
+				<h4><span id="p3"></span></h4>
+                                <section data-role="collapsible" id="y3"></section>
+			</section>
+			<section data-role="collapsible">
+				<h4><span id="p4"></span></h4>
+                                <section data-role="collapsible" id="y4"></section>
+			</section>
+                    </section>
+                    
+		</section>
+
+		<footer data-role="footer">
+                    <nav data-role="navbar">
+                        <ul>
+                            <li>
+                                <a href="index.html" class="ui-btn ui-icon-home ui-btn-icon-bottom" data-transition="slidefade">Home</a>
+                            </li>
+                            <li>
+                                <a href="textualdisplay.html" class="ui-btn ui-icon-info ui-btn-icon-bottom" data-transition="slidefade">Textual Display of Remote Data</a>
+                            </li>
+                            <li>
+                                <a href="graphicaldisplay.html" class="ui-btn ui-icon-eye ui-btn-icon-bottom" data-transition="slidefade">Graphical Display of Remote Data</a>                            
+                            </li>
+                            <li>
+                                <a href="geographicaldisplay.html" class="ui-btn ui-icon-eye ui-btn-icon-bottom" data-transition="slidefade">Geographic Representation of Data</a>                            
+                            </li>
+                            <li>
+                                <a href="about.html" class="ui-btn ui-icon-info ui-btn-icon-bottom" data-transition="slidefade">About</a>                            
+                            </li>
+                        </ul>
+                    </nav>
+                </footer>
+            
+    <link rel="stylesheet" href="themes/mytheme.css" />
+            <script>
+        var n=1;
+        $(document).ready(function(){
+           $.ajax({
+                type: "GET",
+                url: "Ind-GreenHouseGasesG7.xml",
+                dataType: "xml",
+                success: gases 
+              });
+           function gases(xml) {
+               x=1;
+                //console.log("in gases");
+               $(xml).find("data").each(function(){
+                    //console.log("in data");
+                   $(this).find("records").each(function() {
+                       console.log("in records");
+                       
+                       $(this).find("record").each(function() {
+                            //$(this).find("record");
+                           console.log("in record");
+                            //$("#sdata1").html("");
+                            
+                           if( $(this).find("country").text() == "France") { 
+                               
+                               
+                              
+                                   $("#p1").html($(this).find("country").text());
+                                   
+                                   $("#y1").append("<p>Value of "+ $(this).find("variable").text() + " in year " +
+                                       $(this).find("time").text() + " was : " + $(this).find("value").text() + "</p>");
+
+
+                                   
+                                
+                           }
+                           
+                           if( $(this).find("country").text() == "Germany") { 
+                               
+                               
+                               
+                                   $("#p2").html($(this).find("country").text());
+                                   $("#y2").append("<p>Value of "+ $(this).find("variable").text() + " in year " +
+                                       $(this).find("time").text() + " was : " + $(this).find("value").text() + "</p>");
+                           }
+                           
+                           if( $(this).find("country").text() == "Italy") { 
+                               
+                               
+                               
+                                   $("#p3").html($(this).find("country").text());
+                                   $("#y3").append("<p>Value of "+ $(this).find("variable").text() + " in year " +
+                                       $(this).find("time").text() + " was : " + $(this).find("value").text() + "</p>");
+                               
+                           }
+                           
+                           if( $(this).find("country").text() == "United Kingdom") { 
+                               
+                               
+                               
+                                   $("#p4").html($(this).find("country").text());
+                                   $("#y4").append("<p>Value of "+ $(this).find("variable").text() + " in year " +
+                                       $(this).find("time").text() + " was : " + $(this).find("value").text() + "</p>");
+                           }
+                   }); 
+                    });
+                });
+            }
+
+        });
+
+
+    </script>
+	</div>
+</body>
+</html>

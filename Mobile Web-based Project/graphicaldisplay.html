@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="_css/jquery.mobile.css" />
+        <link rel="stylesheet" href="themes/mytheme.css" />
+	<script src="_js/jquery.js"></script>
+	<script src="_js/jquery.mobile.js"></script>
+	<script src="_js/Chart.js"></script>
+        <title>Final Project</title>
+        
+        
+	<style>
+		th { padding: 5px; margin: 5px; color: grey; font-weight: bold;}
+		td {padding: 5px; margin: 5px; color: teal;}
+		#title {font-weight: bold; color: teal; font-style:italic;}
+	</style>
+</head>
+
+<body>
+	<div id="jsonOut" data-role="page" data-theme="a">
+		<header data-role="header">
+                    <h1>Final Project</h1>
+		</header>
+		
+		<section class="ui-content" role="main">
+			<section id="sdata">
+                            <p style="text-align:center">France,Italy Germany UK</p> 
+                            <canvas id="canvas" >
+                                
+                            </canvas>
+                            <span><b>France</b></span>
+                            <canvas id="canvas1"></canvas>
+                            <span><b>Italy</b></span>
+                            
+			</section>
+                    <section id="sdata1">
+                        <canvas id="canvas2"></canvas>
+                        <span><b>Germany</b></span>
+                            <canvas id="canvas3"></canvas>
+                            <span><b>United Kingdom</b></span>
+                    </section>
+                    
+		</section>
+                <section id="legend" style="text-align: center"></section> 
+		<footer data-role="footer">
+                    <nav data-role="navbar">
+                        <ul>
+                            <li>
+                                <a href="index.html" class="ui-btn ui-icon-home ui-btn-icon-bottom" data-transition="slidefade">Home</a>
+                            </li>
+                            <li>
+                                <a href="textualdisplay.html" class="ui-btn ui-icon-info ui-btn-icon-bottom" data-transition="slidefade">Textual Display of Remote Data</a>
+                            </li>
+                            <li>
+                                <a href="graphicaldisplay.html" class="ui-btn ui-icon-eye ui-btn-icon-bottom" data-transition="slidefade">Graphical Display of Remote Data</a>                            
+                            </li>
+                            <li>
+                                <a href="geographicaldisplay.html" class="ui-btn ui-icon-eye ui-btn-icon-bottom" data-transition="slidefade">Geographic Representation of Data</a>                            
+                            </li>
+                            <li>
+                                <a href="about.html" class="ui-btn ui-icon-info ui-btn-icon-bottom" data-transition="slidefade">About</a>                            
+                            </li>
+                        </ul>
+                    </nav>
+                </footer>
+            
+            <script>
+            var labels = new Array();
+
+		var data1 = new Array();
+		var data2 = new Array();
+		var data3 = new Array();
+
+		$(document).ready(function() {
+                    $.ajax({
+                            type: "GET",
+                            url: "Ind-GreenHouseGasesG7.xml",
+                            dataType: "xml",
+                            success:loadChartData
+                    });
+
+                    function loadChartData(xml) {
+                        xx=0; yy=0; x=0; y=0;
+                        $(xml).find("records");
+                                            
+                            $(xml).find("record").each(function() {
+                               // console.log("in record");
+                                
+                                if( $(this).find("country").text() == "France" && $(this).find("variable").text() == "Methane") {
+                                    labels[xx] = parseInt($(this).find("time").text());
+                                    xx+=1;
+                                }
+                                
+                                if( $(this).find("country").text() == "France" && $(this).find("variable").text() == "Methane") {
+                                    data1[yy] = parseInt($(this).find("value").text());
+                                    yy+=1;
+                                }
+                                
+                                if( $(this).find("country").text() == "France" && $(this).find("variable").text() == "Nitrous oxide") {
+                                    data2[x] = parseInt($(this).find("value").text());
+                                    x+=1; 
+                                }
+                                
+                                if( $(this).find("country").text() == "France" && $(this).find("variable").text() == "Hydrofluorocarbons") {
+                                    data3[y] = parseInt($(this).find("value").text());
+                                    y+=1;
+                                }
+                                
+                                
+                                
+                                
+                            });
+                                console.log(labels);
+                                console.log(data1);            
+                                console.log(data2);
+                                console.log(data3);
+                                var chartData = {
+                                    labels : labels,
+                                    datasets: [    //container for each line
+                           {
+                               fillColor : "rgba(220, 0, 0, 0.5)",
+                               strokeColor: "rgba(255, 0, 0, 1)",
+                               pointColor : "blue",
+                               pointStrokeColor: "black",
+                               data : data1
+                           },
+                           {
+                               fillColor : "rgba(0, 0, 220, 0.5)",
+                               strokeColor: "rgba(0, 0, 255, 1)",
+                               pointColor : "red",
+                               pointStrokeColor: "black",
+                               data : data2
+                           },
+                           {
+                               fillColor : "rgba(0, 220, 0, 0.5)",
+                               strokeColor: "rgba(0, 255, 0, 1)",
+                               pointColor : "green",
+                               pointStrokeColor: "black",
+                               data : data3
+                           }
+                       ]
+                                };
+                                cvs = document.getElementById("canvas");
+                                ctx = cvs.getContext('2d');
+                                myChart = new Chart(ctx).Line(chartData);
+                               
+                                $("#legend").html("<table style='text-align:center'>");
+                                $("#legend").append("<tr><td style='background:blue'>Level of Methane " + "</td>" );
+                                $("#legend").append("<tr><td style='background:red'>Level of Nitrous oxide " + "</td></tr>" );
+                                $("#legend").append("<tr><td style='background:green'>Level of Hydrofluorocarbons " + "</td>" + "</tr>");    
+                                $("#legend").append("</table>");
+                                $("#legend").append("<p style='text-align:center'><b>Level of following greenhouse gases in respective colors in respective countries from 2005 to 2009</b></p>");
+                        }
+                             
+                        
+                        
+                        
+                        //console.log(data1);
+                    });
+        </script>
+        <script>
+            var labels = new Array();
+            
+		var data1 = new Array();
+		var data2 = new Array();
+		var data3 = new Array();
+
+		$(document).ready(function() {
+                    $.ajax({
+                            type: "GET",
+                            url: "Ind-GreenHouseGasesG7.xml",
+                            dataType: "xml",
+                            success:loadChartData
+                    });
+
+                    function loadChartData(xml) {
+                        xx=0; yy=0; x=0; y=0;
+                        $(xml).find("records");
+                                            
+                            $(xml).find("record").each(function() {
+                               // console.log("in record");
+                                
+                                if( $(this).find("country").text() == "Italy" && $(this).find("variable").text() == "Methane") {
+                                    labels[xx] = parseInt($(this).find("time").text());
+                                    xx+=1;
+                                }
+                                
+                                if( $(this).find("country").text() == "Italy" && $(this).find("variable").text() == "Methane") {
+                                    data1[yy] = parseInt($(this).find("value").text());
+                                    yy+=1;
+                                }
+                                
+                                if( $(this).find("country").text() == "Italy" && $(this).find("variable").text() == "Nitrous oxide") {
+                                    data2[x] = parseInt($(this).find("value").text());
+                                    x+=1; 
+                                }
+                                
+                                if( $(this).find("country").text() == "Italy" && $(this).find("variable").text() == "Hydrofluorocarbons") {
+                                    data3[y] = parseInt($(this).find("value").text());
+                                    y+=1;
+                                }
+                                
+                                
+                                
+                                
+                            });
+                                console.log(labels);
+                                console.log(data1);            
+                                console.log(data2);
+                                console.log(data3);
+                                var chartData = {
+                                    labels : labels,
+                                    datasets: [    //container for each line
+                           {
+                               fillColor : "rgba(220, 0, 0, 0.5)",
+                               strokeColor: "rgba(255, 0, 0, 1)",
+                               pointColor : "blue",
+                               pointStrokeColor: "black",
+                               data : data1
+                           },
+                           {
+                               fillColor : "rgba(0, 0, 220, 0.5)",
+                               strokeColor: "rgba(0, 0, 255, 1)",
+                               pointColor : "red",
+                               pointStrokeColor: "black",
+                               data : data2
+                           },
+                           {
+                               fillColor : "rgba(0, 220, 0, 0.5)",
+                               strokeColor: "rgba(0, 255, 0, 1)",
+                               pointColor : "green",
+                               pointStrokeColor: "black",
+                               data : data3
+                           }
+                       ]
+                                };
+                                cvs = document.getElementById("canvas1");
+                                ctx = cvs.getContext('2d');
+                                myChart = new Chart(ctx).Line(chartData);
+                                
+                                
+                        }
+                             
+                        
+                        
+                        
+                        //console.log(data1);
+                    });
+        </script>
+        <script>
+            var labels = new Array();
+
+		var data1 = new Array();
+		var data2 = new Array();
+		var data3 = new Array();
+
+		$(document).ready(function() {
+                    $.ajax({
+                            type: "GET",
+                            url: "Ind-GreenHouseGasesG7.xml",
+                            dataType: "xml",
+                            success:loadChartData
+                    });
+
+                    function loadChartData(xml) {
+                        xx=0; yy=0; x=0; y=0;
+                        $(xml).find("records");
+                                            
+                            $(xml).find("record").each(function() {
+                               // console.log("in record");
+                                
+                                if( $(this).find("country").text() == "Germany" && $(this).find("variable").text() == "Methane") {
+                                    labels[xx] = parseInt($(this).find("time").text());
+                                    xx+=1;
+                                }
+                                
+                                if( $(this).find("country").text() == "Germany" && $(this).find("variable").text() == "Methane") {
+                                    data1[yy] = parseInt($(this).find("value").text());
+                                    yy+=1;
+                                }
+                                
+                                if( $(this).find("country").text() == "Germany" && $(this).find("variable").text() == "Nitrous oxide") {
+                                    data2[x] = parseInt($(this).find("value").text());
+                                    x+=1; 
+                                }
+                                
+                                if( $(this).find("country").text() == "Germany" && $(this).find("variable").text() == "Hydrofluorocarbons") {
+                                    data3[y] = parseInt($(this).find("value").text());
+                                    y+=1;
+                                }
+                                
+                                
+                                
+                                
+                            });
+                                console.log(labels);
+                                console.log(data1);            
+                                console.log(data2);
+                                console.log(data3);
+                                var chartData = {
+                                    labels : labels,
+                                    datasets: [    //container for each line
+                           {
+                               fillColor : "rgba(220, 0, 0, 0.5)",
+                               strokeColor: "rgba(255, 0, 0, 1)",
+                               pointColor : "blue",
+                               pointStrokeColor: "black",
+                               data : data1
+                           },
+                           {
+                               fillColor : "rgba(0, 0, 220, 0.5)",
+                               strokeColor: "rgba(0, 0, 255, 1)",
+                               pointColor : "red",
+                               pointStrokeColor: "black",
+                               data : data2
+                           },
+                           {
+                               fillColor : "rgba(0, 220, 0, 0.5)",
+                               strokeColor: "rgba(0, 255, 0, 1)",
+                               pointColor : "green",
+                               pointStrokeColor: "black",
+                               data : data3
+                           }
+                       ]
+                                };
+                                cvs = document.getElementById("canvas2");
+                                ctx = cvs.getContext('2d');
+                                myChart = new Chart(ctx).Line(chartData);
+                                
+                                
+                        }
+                             
+                        
+                        
+                        
+                        //console.log(data1);
+                    });
+        </script>
+        <script>
+            var labels = new Array();
+
+		var data1 = new Array();
+		var data2 = new Array();
+		var data3 = new Array();
+
+		$(document).ready(function() {
+                    $.ajax({
+                            type: "GET",
+                            url: "Ind-GreenHouseGasesG7.xml",
+                            dataType: "xml",
+                            success:loadChartData
+                    });
+
+                    function loadChartData(xml) {
+                        xx=0; yy=0; x=0; y=0;
+                        $(xml).find("records");
+                                            
+                            $(xml).find("record").each(function() {
+                               // console.log("in record");
+                                
+                                if( $(this).find("country").text() == "United Kingdom" && $(this).find("variable").text() == "Methane") {
+                                    labels[xx] = parseInt($(this).find("time").text());
+                                    xx+=1;
+                                }
+                                
+                                if( $(this).find("country").text() == "United Kingdom" && $(this).find("variable").text() == "Methane") {
+                                    data1[yy] = parseInt($(this).find("value").text());
+                                    yy+=1;
+                                }
+                                
+                                if( $(this).find("country").text() == "United Kingdom" && $(this).find("variable").text() == "Nitrous oxide") {
+                                    data2[x] = parseInt($(this).find("value").text());
+                                    x+=1; 
+                                }
+                                
+                                if( $(this).find("country").text() == "United Kingdom" && $(this).find("variable").text() == "Hydrofluorocarbons") {
+                                    data3[y] = parseInt($(this).find("value").text());
+                                    y+=1;
+                                }
+                                
+                                
+                                
+                                
+                            });
+                                console.log(labels);
+                                console.log(data1);            
+                                console.log(data2);
+                                console.log(data3);
+                                var chartData = {
+                                    labels : labels,
+                                    datasets: [    //container for each line
+                           {
+                               fillColor : "rgba(220, 0, 0, 0.5)",
+                               strokeColor: "rgba(255, 0, 0, 1)",
+                               pointColor : "blue",
+                               pointStrokeColor: "black",
+                               data : data1
+                           },
+                           {
+                               fillColor : "rgba(0, 0, 220, 0.5)",
+                               strokeColor: "rgba(0, 0, 255, 1)",
+                               pointColor : "red",
+                               pointStrokeColor: "black",
+                               data : data2
+                           },
+                           {
+                               fillColor : "rgba(0, 220, 0, 0.5)",
+                               strokeColor: "rgba(0, 255, 0, 1)",
+                               pointColor : "green",
+                               pointStrokeColor: "black",
+                               data : data3
+                           }
+                       ]
+                                };
+                                cvs = document.getElementById("canvas3");
+                                ctx = cvs.getContext('2d');
+                                myChart = new Chart(ctx).Line(chartData);
+                                
+                                
+                        }
+                             
+                        
+                        
+                        
+                        //console.log(data1);
+                    });
+        </script>
+	</div>
+</body>
+</html>

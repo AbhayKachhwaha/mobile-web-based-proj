@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+        <meta content="en" http-equiv="content-language">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+	<link rel="stylesheet" href="_css/jquery.mobile.css" />
+	
+
+        <title>Final Project</title>
+        
+        
+	<style>
+		th { padding: 5px; margin: 5px; color: grey; font-weight: bold;}
+		td {padding: 5px; margin: 5px; color: teal;}
+		#title {font-weight: bold; color: teal; font-style:italic;}
+	</style>
+</head>
+
+<body>
+	<div id="jsonOut" data-role="page" data-theme="a">
+		<header data-role="header">
+                    <h1>Final Project</h1>
+		</header>
+		
+		<section class="ui-content" role="main">
+			<section id="sdata">
+                            <div id="map_canvas" style="height:400px;"></div>
+			</section>
+		</section>
+
+		<footer data-role="footer">
+                    <nav data-role="navbar">
+                        <ul>
+                            <li>
+                                <a href="index.html" class="ui-btn ui-icon-home ui-btn-icon-bottom" data-transition="slidefade">Home</a>
+                            </li>
+                            <li>
+                                <a href="textualdisplay.html" class="ui-btn ui-icon-info ui-btn-icon-bottom" data-transition="slidefade">Textual Display of Remote Data</a>
+                            </li>
+                            <li>
+                                <a href="graphicaldisplay.html" class="ui-btn ui-icon-eye ui-btn-icon-bottom" data-transition="slidefade">Graphical Display of Remote Data</a>                            
+                            </li>
+                            <li>
+                                <a href="geographicaldisplay.html" class="ui-btn ui-icon-eye ui-btn-icon-bottom" data-transition="slidefade">Geographic Representation of Data</a>                            
+                            </li>
+                            <li>
+                                <a href="about.html" class="ui-btn ui-icon-info ui-btn-icon-bottom" data-transition="slidefade">About</a>                            
+                            </li>
+                        </ul>
+                    </nav>
+                </footer>
+            <script src="_js/jquery.js"></script>
+	<script src="_js/jquery.mobile.js"></script>
+	<link rel="stylesheet" href="themes/mytheme.css" />
+            <script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3&sensor=false&language=en"></script>
+            <script>
+            $(document).ready(function() {
+            if(navigator.geolocation){
+                var options = {
+                    enableHighAccuracy: true,
+                    timeout: 5000, //how long to wait for location(in ms)
+                    maximumAge: 0 // if 0, must obtain a new location each load
+                };
+                navigator.geolocation.getCurrentPosition(success, fail, options);
+            }
+            else {
+                alert("geo not available");
+            }
+	});
+        function fail(err) {
+            alert("Failed" + err.code + err.message);
+        }
+        function success(pos) {
+            display = new google.maps.DirectionsRenderer();
+            var lat= pos.coords.latitude;
+            var lng= pos.coords.longitude;
+            
+            
+            var mapCenter = new google.maps.LatLng(lat, lng);
+            paris = new google.maps.LatLng(48.856035, 2.352896);
+            berlin = new google.maps.LatLng(52.513810, 13.399044);
+            rome = new google.maps.LatLng(41.904705, 12.494113);
+            london = new google.maps.LatLng(51.505782, -0.128378);
+            var mapOptions = {
+                center: mapCenter,
+                zoom: 3,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            map1 = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+            
+            var loc1 = new google.maps.Marker({
+                map: map1,
+                position : mapCenter
+            });
+            var loc1 = new google.maps.Marker({
+                map: map1,
+                position : paris
+            });
+            var loc2 = new google.maps.Marker({
+                map: map1,
+                position : berlin
+            });
+            var loc3 = new google.maps.Marker({
+                map: map1,
+                position : rome
+            });
+            var loc4 = new google.maps.Marker({
+                map: map1,
+                position : london
+            });
+            display.setMap(map1);
+        }
+        </script>
+	</div>
+</body>
+</html>
